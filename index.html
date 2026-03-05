@@ -5,8 +5,6 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link rel="manifest" href="manifest.json">
-
 <style>                            
 
 body{
@@ -136,6 +134,11 @@ margin-top:30px;
 font-size:14px;
 }
 
+/* Hide the file input */
+#fileInput {
+  display: none;
+}
+
 </style>
 
 </head>
@@ -146,9 +149,11 @@ font-size:14px;
 
 <h1>GRANDMA CALL APP</h1>
 
-<button class="add" onclick="addContact()">Add Contact</button>
+<button class="add" onclick="triggerAddContact()">Add Contact</button>
 
 <div class="container" id="contacts"></div>
+
+<input type="file" id="fileInput" accept="image/*">
 
 <footer>
 By FARDEEN
@@ -159,6 +164,8 @@ By FARDEEN
 let contacts = [
 {name:"Fardeen",number:"1234567890",photo:"Family call.png"}
 ];
+
+let tempContact = {}; // store info before adding
 
 function renderContacts(){
 
@@ -174,7 +181,7 @@ container.innerHTML+=`
 <button onclick="toggleMenu(${i})">⋮</button>
 
 <div class="menu-options" id="menu${i}">
-<button onclick="editContact(${i})">Edit</button>
+<button onclick="triggerEditContact(${i})">Edit</button>
 <button onclick="deleteContact(${i})">Delete</button>
 </div>
 </div>
@@ -204,45 +211,80 @@ menu.style.display=menu.style.display=="block"?"none":"block";
 
 }
 
-function addContact(){
+// =====================
+// Add Contact with gallery
+// =====================
+function triggerAddContact() {
+    const name = prompt("Enter Name");
+    const number = prompt("Enter Phone Number");
 
-let name=prompt("Enter Name");
-let number=prompt("Enter Phone Number");
-let photo=prompt("Enter Photo URL (leave blank for default)");
+    if(name && number){
+        tempContact = {name:name, number:number, photo:"Family call.png"};
+        document.getElementById("fileInput").click(); // open file chooser
+    }
+}
 
-if(name && number){
-contacts.push({
-name:name,
-number:number,
-photo: photo ? photo : "Family call.png"
+document.getElementById("fileInput").addEventListener("change", function(event){
+    const file = event.target.files[0];
+    if(file){
+        const reader = new FileReader();
+        reader.onload = function(e){
+            tempContact.photo = e.target.result;
+            contacts.push(tempContact);
+            tempContact = {};
+            renderContacts();
+        }
+        reader.readAsDataURL(file);
+    } else if(tempContact.name){ // no file chosen
+        contacts.push(tempContact);
+        tempContact = {};
+        renderContacts();
+    }
 });
-renderContacts();
+
+// =====================
+// Edit Contact with gallery
+// =====================
+let editIndex = null;
+
+function triggerEditContact(i){
+    editIndex = i;
+    const name = prompt("Edit Name", contacts[i].name);
+    const number = prompt("Edit Number", contacts[i].number);
+
+    if(name && number){
+        tempContact = {name:name, number:number, photo: contacts[i].photo};
+        document.getElementById("fileInput").click(); // choose new photo if needed
+    }
 }
 
-}
-
-function editContact(i){
-
-let name=prompt("Edit Name",contacts[i].name);
-let number=prompt("Edit Number",contacts[i].number);
-let photo=prompt("Edit Photo URL", contacts[i].photo);
-
-if(name && number){
-contacts[i].name=name;
-contacts[i].number=number;
-contacts[i].photo=photo ? photo : "Family call.png";
-renderContacts();
-}
-
-}
+document.getElementById("fileInput").addEventListener("change", function(event){
+    if(editIndex !== null){
+        const file = event.target.files[0];
+        if(file){
+            const reader = new FileReader();
+            reader.onload = function(e){
+                tempContact.photo = e.target.result;
+                contacts[editIndex] = tempContact;
+                tempContact = {};
+                editIndex = null;
+                renderContacts();
+            }
+            reader.readAsDataURL(file);
+        } else { // no file chosen
+            contacts[editIndex] = tempContact;
+            tempContact = {};
+            editIndex = null;
+            renderContacts();
+        }
+    }
+});
 
 function deleteContact(i){
-
 if(confirm("Delete Contact?")){
 contacts.splice(i,1);
 renderContacts();
 }
-
 }
 
 function toggleDark(){
