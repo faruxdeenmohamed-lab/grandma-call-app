@@ -5,10 +5,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- Cropper.js CSS -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet"/>
+<style>                            
 
-<style>
 body{
 font-family: Arial;
 background:#f2f2f2;
@@ -17,30 +15,133 @@ margin:0;
 padding:20px;
 }
 
-h1{margin-bottom:20px;}
-.dark{background:#121212;color:white;}
-.dark .card{background:#1e1e1e;}
-.dark button{background:#333;color:white;}
-.toggle{position:fixed;top:10px;left:10px;padding:10px;border:none;border-radius:10px;cursor:pointer;}
-.add{margin-bottom:20px;padding:12px 20px;font-size:16px;border:none;border-radius:10px;background:#2196F3;color:white;cursor:pointer;}
-.container{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;}
-.card{background:white;padding:15px;border-radius:20px;width:180px;position:relative;box-shadow:0 3px 10px rgba(0,0,0,0.2);transition: transform 0.2s;}
-.card:hover{transform: scale(1.05);}
-.card img{width:120px;height:120px;border-radius:10px;object-fit: cover;}
-.name{font-size:24px;margin:10px 0;font-weight:bold;}
-.call{padding:10px 20px;font-size:16px;border:none;border-radius:10px;cursor:pointer;background:#4CAF50;color:white;}
-.menu{position:absolute;top:5px;right:10px;}
-.menu button{background:none;border:none;font-size:20px;cursor:pointer;}
-.menu-options{display:none;position:absolute;right:0;background:white;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.3);}
-.menu-options button{display:block;width:100%;border:none;background:none;padding:10px;cursor:pointer;}
-footer{margin-top:30px;font-size:14px;}
+h1{
+margin-bottom:20px;
+}
 
-/* Cropper modal */
-#cropModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;z-index:9999;}
-#cropModal img{max-width:90%;max-height:80%;border-radius:10px;}
-#cropModal button{margin-top:10px;padding:10px 20px;font-size:16px;border:none;border-radius:10px;cursor:pointer;}
+.dark{
+background:#121212;
+color:white;
+}
+
+.dark .card{
+background:#1e1e1e;
+}
+
+.dark button{
+background:#333;
+color:white;
+}
+
+.toggle{
+position:fixed;
+top:10px;
+left:10px;
+padding:10px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+}
+
+.add{
+margin-bottom:20px;
+padding:12px 20px;
+font-size:16px;
+border:none;
+border-radius:10px;
+background:#2196F3;
+color:white;
+cursor:pointer;
+}
+
+.container{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:20px;
+}
+
+.card{
+background:white;
+padding:15px;
+border-radius:20px;
+width:180px;
+position:relative;
+box-shadow:0 3px 10px rgba(0,0,0,0.2);
+transition: transform 0.2s;
+}
+
+.card:hover{
+transform: scale(1.05);
+}
+
+.card img{
+width:120px;
+height:120px;
+border-radius:10px;
+object-fit: cover;
+}
+
+.name{
+font-size:24px;
+margin:10px 0;
+font-weight:bold;
+}
+
+.call{
+padding:10px 20px;
+font-size:16px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+background:#4CAF50;
+color:white;
+}
+
+.menu{
+position:absolute;
+top:5px;
+right:10px;
+}
+
+.menu button{
+background:none;
+border:none;
+font-size:20px;
+cursor:pointer;
+}
+
+.menu-options{
+display:none;
+position:absolute;
+right:0;
+background:white;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,0.3);
+}
+
+.menu-options button{
+display:block;
+width:100%;
+border:none;
+background:none;
+padding:10px;
+cursor:pointer;
+}
+
+footer{
+margin-top:30px;
+font-size:14px;
+}
+
+#photoInput {
+  display: none;
+}
+
 </style>
+
 </head>
+
 <body>
 
 <button class="toggle" onclick="toggleDark()">🌙</button>
@@ -51,160 +152,122 @@ footer{margin-top:30px;font-size:14px;}
 
 <div class="container" id="contacts"></div>
 
-<!-- File input hidden -->
-<input type="file" id="fileInput" accept="image/*" style="display:none;">
-
-<!-- Cropper modal -->
-<div id="cropModal">
-  <div>
-    <img id="cropImage">
-    <br>
-    <button onclick="cropImage()">Crop & Use</button>
-    <button onclick="closeCrop()">Cancel</button>
-  </div>
-</div>
+<!-- File input for photo -->
+<input type="file" id="photoInput" accept="image/*">
 
 <footer>
 By FARDEEN
 </footer>
 
-<!-- Cropper.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
-
 <script>
+
 let contacts = [
 {name:"Fardeen",number:"1234567890",photo:"Family call.png"}
 ];
 
 let tempContact = {};
 let editIndex = null;
-let cropper = null;
 
 function renderContacts(){
-    const container = document.getElementById("contacts");
-    container.innerHTML="";
-    contacts.forEach((c,i)=>{
-        container.innerHTML+=`
-        <div class="card">
-        <div class="menu">
+  const container=document.getElementById("contacts");
+  container.innerHTML="";
+  contacts.forEach((c,i)=>{
+    container.innerHTML+=`
+    <div class="card">
+      <div class="menu">
         <button onclick="toggleMenu(${i})">⋮</button>
         <div class="menu-options" id="menu${i}">
-        <button onclick="triggerEditContact(${i})">Edit</button>
-        <button onclick="deleteContact(${i})">Delete</button>
+          <button onclick="triggerEditContact(${i})">Edit</button>
+          <button onclick="deleteContact(${i})">Delete</button>
         </div>
-        </div>
-        <img src="${c.photo}" alt="${c.name}">
-        <div class="name">${c.name}</div>
-        <button class="call" onclick="callNumber('${c.number}')">Call</button>
-        </div>`;
-    });
+      </div>
+      <img src="${c.photo}" alt="${c.name}">
+      <div class="name">${c.name}</div>
+      <button class="call" onclick="callNumber('${c.number}')">Call</button>
+    </div>`;
+  });
 }
 
-function callNumber(num){window.location.href="tel:"+num;}
+function callNumber(num){
+  window.location.href="tel:"+num;
+}
+
 function toggleMenu(i){
-    let menu=document.getElementById("menu"+i);
-    menu.style.display=menu.style.display=="block"?"none":"block";
+  const menu=document.getElementById("menu"+i);
+  menu.style.display=menu.style.display=="block"?"none":"block";
 }
 
-// -----------------
+// =====================
 // Add Contact
-// -----------------
+// =====================
 function triggerAddContact(){
-    const name = prompt("Enter Name");
-    const number = prompt("Enter Phone Number");
-    if(name && number){
-        tempContact = {name:name, number:number, photo:"Family call.png"};
-        editIndex = null;
-        document.getElementById("fileInput").click();
-    }
+  const name = prompt("Enter Name");
+  const number = prompt("Enter Phone Number");
+  if(name && number){
+    tempContact = {name:name, number:number, photo:"Family call.png"};
+    editIndex = null;
+    document.getElementById("photoInput").click();
+  }
 }
 
-// -----------------
+// =====================
 // Edit Contact
-// -----------------
+// =====================
 function triggerEditContact(i){
-    editIndex = i;
-    const name = prompt("Edit Name", contacts[i].name);
-    const number = prompt("Edit Number", contacts[i].number);
-    if(name && number){
-        tempContact = {name:name, number:number, photo:contacts[i].photo};
-        document.getElementById("fileInput").click();
-    }
+  editIndex = i;
+  const name = prompt("Edit Name", contacts[i].name);
+  const number = prompt("Edit Number", contacts[i].number);
+  if(name && number){
+    tempContact = {name:name, number:number, photo:contacts[i].photo};
+    document.getElementById("photoInput").click();
+  }
 }
 
-// -----------------
+// =====================
 // File input change
-// -----------------
-document.getElementById("fileInput").addEventListener("change", function(e){
-    const file = e.target.files[0];
-    if(file){
-        const reader = new FileReader();
-        reader.onload = function(event){
-            openCropModal(event.target.result);
-        }
-        reader.readAsDataURL(file);
-    } else {
-        finalizeContact();
+// =====================
+document.getElementById("photoInput").addEventListener("change", function(e){
+  const file = e.target.files[0];
+  if(file){
+    const reader = new FileReader();
+    reader.onload = function(event){
+      tempContact.photo = event.target.result;
+      finalizeContact();
     }
-    this.value = ''; // reset input
+    reader.readAsDataURL(file);
+  } else {
+    finalizeContact();
+  }
+  this.value = '';
 });
 
-// -----------------
-// Cropper modal
-// -----------------
-function openCropModal(src){
-    const cropModal = document.getElementById("cropModal");
-    const cropImage = document.getElementById("cropImage");
-    cropImage.src = src;
-    cropModal.style.display = "flex";
-    cropper = new Cropper(cropImage, {
-        aspectRatio: 1,
-        viewMode: 1,
-        background: false
-    });
-}
-
-function cropImage(){
-    if(cropper){
-        const canvas = cropper.getCroppedCanvas({width:120, height:120});
-        tempContact.photo = canvas.toDataURL("image/png");
-        closeCrop();
-        finalizeContact();
-    }
-}
-
-function closeCrop(){
-    const cropModal = document.getElementById("cropModal");
-    cropModal.style.display = "none";
-    if(cropper){
-        cropper.destroy();
-        cropper = null;
-    }
-}
-
+// =====================
+// Finalize Add/Edit Contact
+// =====================
 function finalizeContact(){
-    if(editIndex !== null){
-        contacts[editIndex] = tempContact;
-        editIndex = null;
-    } else {
-        contacts.push(tempContact);
-    }
-    tempContact = {};
-    renderContacts();
+  if(editIndex !== null){
+    contacts[editIndex] = tempContact;
+    editIndex = null;
+  } else {
+    contacts.push(tempContact);
+  }
+  tempContact = {};
+  renderContacts();
 }
 
 function deleteContact(i){
-    if(confirm("Delete Contact?")){
-        contacts.splice(i,1);
-        renderContacts();
-    }
+  if(confirm("Delete Contact?")){
+    contacts.splice(i,1);
+    renderContacts();
+  }
 }
 
 function toggleDark(){
-    document.body.classList.toggle("dark");
+  document.body.classList.toggle("dark");
 }
 
 renderContacts();
+
 </script>
 
 </body>
