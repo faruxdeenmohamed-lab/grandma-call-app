@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Grandma Call App</title>
+
+<link rel="manifest" href="manifest.json">
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#eef2f7;
+text-align:center;
+}
+
+header{
+background:#4CAF50;
+color:white;
+padding:20px;
+font-size:32px;
+font-weight:bold;
+}
+
+.container{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+padding:20px;
+}
+
+.card{
+background:white;
+margin:15px;
+padding:20px;
+border-radius:20px;
+width:220px;
+box-shadow:0 6px 15px rgba(0,0,0,0.15);
+position:relative;
+transition:0.2s;
+}
+
+.card:hover{
+transform:scale(1.05);
+}
+
+.card img{
+width:150px;
+height:150px;
+border-radius:50%;
+object-fit:cover;
+border:4px solid #4CAF50;
+}
+
+.callbtn{
+width:180px;
+height:55px;
+font-size:20px;
+border:none;
+border-radius:12px;
+margin-top:12px;
+background:#4CAF50;
+color:white;
+cursor:pointer;
+}
+
+.editbtn{
+position:absolute;
+top:10px;
+right:40px;
+background:#ff9800;
+border:none;
+border-radius:8px;
+padding:6px 10px;
+cursor:pointer;
+color:white;
+font-size:16px;
+}
+
+.deletebtn{
+position:absolute;
+top:10px;
+right:10px;
+background:red;
+border:none;
+border-radius:8px;
+padding:6px 10px;
+cursor:pointer;
+color:white;
+font-size:16px;
+}
+
+.addbtn{
+background:#2196F3;
+color:white;
+width:240px;
+height:60px;
+font-size:22px;
+border:none;
+border-radius:14px;
+margin:25px;
+cursor:pointer;
+}
+
+.footer{
+margin-top:30px;
+padding:20px;
+color:#555;
+font-size:16px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+📞 Call Family
+</header>
+
+<button class="addbtn" onclick="addContact()">➕ Add Contact</button>
+
+<div class="container" id="contactList"></div>
+
+<input type="file" id="photoInput" style="display:none">
+
+<div class="footer">
+Made by <b>FARDEEN</b>
+</div>
+
+<script>
+
+let contacts = JSON.parse(localStorage.getItem("contacts")) || [];
+
+function saveContacts(){
+localStorage.setItem("contacts", JSON.stringify(contacts));
+}
+
+function renderContacts(){
+
+let list = document.getElementById("contactList");
+list.innerHTML="";
+
+contacts.forEach((c,i)=>{
+
+list.innerHTML += `
+<div class="card">
+
+<button class="editbtn" onclick="editContact(${i})">✏️</button>
+<button class="deletebtn" onclick="deleteContact(${i})">🗑</button>
+
+<img src="${c.photo}">
+<br>
+
+<button class="callbtn" onclick="callNumber('${c.number}')">
+Call ${c.name}
+</button>
+
+</div>
+`;
+
+});
+
+}
+
+function callNumber(num){
+window.location.href="tel:"+num;
+}
+
+function addContact(){
+
+let name = prompt("Enter Name");
+let number = prompt("Enter Phone Number");
+
+if(!name || !number) return;
+
+let input = document.getElementById("photoInput");
+
+input.onchange=function(){
+
+let file = input.files[0];
+let reader = new FileReader();
+
+reader.onload=function(e){
+
+contacts.push({
+name:name,
+number:number,
+photo:e.target.result
+});
+
+saveContacts();
+renderContacts();
+
+};
+
+reader.readAsDataURL(file);
+
+};
+
+input.click();
+
+}
+
+function editContact(i){
+
+let name = prompt("New Name",contacts[i].name);
+let number = prompt("New Number",contacts[i].number);
+
+if(!name || !number) return;
+
+contacts[i].name=name;
+contacts[i].number=number;
+
+let input = document.getElementById("photoInput");
+
+input.onchange=function(){
+
+let file = input.files[0];
+let reader = new FileReader();
+
+reader.onload=function(e){
+
+contacts[i].photo=e.target.result;
+
+saveContacts();
+renderContacts();
+
+};
+
+reader.readAsDataURL(file);
+
+};
+
+input.click();
+
+}
+
+function deleteContact(i){
+
+if(confirm("Delete this contact?")){
+
+contacts.splice(i,1);
+saveContacts();
+renderContacts();
+
+}
+
+}
+
+renderContacts();
+
+</script>
+
+</body>
+</html>
