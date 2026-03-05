@@ -80,6 +80,7 @@ footer{ margin-top:30px; font-size:14px; }
 <button class="add" onclick="triggerAddContact()">Add Contact</button>
 <div class="container" id="contacts"></div>
 
+<!-- File input for adding/editing photo -->
 <input type="file" id="photoInput" accept="image/*">
 
 <footer>By FARDEEN</footer>
@@ -131,18 +132,18 @@ function triggerAddContact(){
   }
 }
 
-// Edit Contact
+// Edit Contact (with Add Photo option)
 function triggerEditContact(i){
   editIndex = i;
   const name = prompt("Edit Name", contacts[i].name);
   const number = prompt("Edit Number", contacts[i].number);
   if(name && number){
     tempContact = {name:name, number:number, photo:contacts[i].photo};
-    document.getElementById("photoInput").click();
+    document.getElementById("photoInput").click(); // open gallery to choose new photo
   }
 }
 
-// Handle file selection
+// Handle file selection (for both add/edit)
 document.getElementById("photoInput").addEventListener("change", function(e){
   const file = e.target.files[0];
   if(file){
@@ -153,12 +154,12 @@ document.getElementById("photoInput").addEventListener("change", function(e){
     }
     reader.readAsDataURL(file);
   } else {
-    finalizeContact();
+    finalizeContact(); // keep old photo if no file selected
   }
   this.value = '';
 });
 
-// Finalize add/edit
+// Finalize add/edit contact
 function finalizeContact(){
   if(editIndex !== null){
     contacts[editIndex] = tempContact;
