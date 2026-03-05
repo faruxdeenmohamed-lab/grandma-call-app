@@ -31,7 +31,7 @@
             --menu-shadow: rgba(255,255,255,0.1);
         }
 
-        /* HEADER & TOP MENU */
+        /* HEADER & TOP MENU (Moved to Left) */
         header {
             display: flex;
             justify-content: space-between;
@@ -40,18 +40,21 @@
             margin-bottom: 20px;
         }
 
-        .top-menu-container { position: relative; }
+        .top-left-menu { position: relative; }
         .dots-btn { 
             background: none; border: none; font-size: 35px; 
             color: var(--text-color); cursor: pointer; padding: 10px;
         }
 
         .menu-dropdown { 
-            display: none; position: absolute; right: 0; top: 60px;
+            display: none; position: absolute; left: 0; top: 60px; /* Aligned Left */
             background: var(--card-bg); border-radius: 15px; 
             box-shadow: 0 10px 30px var(--menu-shadow); z-index: 2000; 
             min-width: 180px; overflow: hidden; border: 1px solid rgba(128,128,128,0.2);
         }
+
+        /* Card Menu stays aligned right inside the card */
+        .card .menu-dropdown { left: auto; right: 0; }
 
         .menu-dropdown button { 
             display: block; width: 100%; padding: 15px 20px; border: none; background: none; 
@@ -59,17 +62,15 @@
             text-align: left; border-bottom: 0.5px solid rgba(128,128,128,0.2);
         }
 
-        /* CONTACT CARDS */
+        /* BIG CONTACT CARDS */
         .container { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; }
         .card { 
             background: var(--card-bg); padding: 35px; border-radius: 40px; width: 250px; 
             position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.15); 
         }
 
-        /* CARD 3-DOT MENU */
         .card-menu { position: absolute; top: 15px; right: 20px; }
         
-        /* PHOTO & TEXT SIZES */
         .card img, .card .initial-circle { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; margin: 0 auto 15px auto; display: block; }
         .card .initial-circle { background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 70px; color: #555; }
         
@@ -78,7 +79,6 @@
         .call-btn { 
             background: #4CAF50; color: white; border: none; padding: 22px; width: 100%; 
             border-radius: 25px; cursor: pointer; font-size: 26px; font-weight: bold;
-            box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
         }
 
         .add-btn { 
@@ -95,7 +95,6 @@
         .modal-header { display: flex; justify-content: space-between; padding: 25px; font-size: 32px; }
         .avatar-section { margin-top: 20px; display: flex; flex-direction: column; align-items: center; }
         .big-avatar { width: 180px; height: 180px; background: #4a4a4c; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 100px; overflow: hidden; }
-        .big-avatar img { width: 100%; height: 100%; object-fit: cover; }
         .input-list { background: var(--ios-input-bg); margin: 30px 20px; border-radius: 20px; overflow: hidden; text-align: left; }
         .input-list input { width: 100%; background: none; border: none; padding: 22px; color: white; font-size: 20px; outline: none; border-bottom: 0.5px solid #3a3a3c; }
 
@@ -105,15 +104,16 @@
 <body>
 
 <header>
-    <div style="width: 50px;"></div>
-    <h1>GRANDMA CALL APP</h1>
-    <div class="top-menu-container">
+    <div class="top-left-menu">
         <button class="dots-btn" onclick="toggleMenu(event, 'topMenu')">⋮</button>
         <div class="menu-dropdown" id="topMenu">
             <button onclick="toggleDark()">🌙 Toggle Theme</button>
         </div>
     </div>
-</header>
+    
+    <h1>GRANDMA CALL APP</h1>
+    
+    <div style="width: 50px;"></div> </header>
 
 <button class="add-btn" onclick="openModal()">+ Add New Contact</button>
 
@@ -144,7 +144,7 @@
 
 <script>
     let contacts = JSON.parse(localStorage.getItem('grandma_contacts')) || [
-        {name: "Giri Roommate", number: "9360697683", photo: null, company: "327"}
+        {name: "Fardeen", number: "9360697683", photo: null, company: "Admin"}
     ];
     let editIdx = null;
     let currentPhoto = null;
@@ -171,21 +171,15 @@
         localStorage.setItem('grandma_contacts', JSON.stringify(contacts));
     }
 
-    // Universal toggle function for both top and card menus
     function toggleMenu(event, menuId) {
         event.stopPropagation();
         const allMenus = document.querySelectorAll('.menu-dropdown');
-        allMenus.forEach(m => {
-            if(m.id !== menuId) m.style.display = 'none';
-        });
+        allMenus.forEach(m => { if(m.id !== menuId) m.style.display = 'none'; });
         const target = document.getElementById(menuId);
         target.style.display = target.style.display === 'block' ? 'none' : 'block';
     }
 
-    // Close all menus when clicking anywhere else
-    window.onclick = () => {
-        document.querySelectorAll('.menu-dropdown').forEach(m => m.style.display = 'none');
-    }
+    window.onclick = () => { document.querySelectorAll('.menu-dropdown').forEach(m => m.style.display = 'none'); }
 
     function openModal(idx = null) {
         editIdx = idx;
@@ -209,7 +203,7 @@
         const avatarDiv = document.getElementById("modalAvatar");
         const removeBtn = document.getElementById("removeBtn");
         if (currentPhoto) {
-            avatarDiv.innerHTML = `<img src="${currentPhoto}">`;
+            avatarDiv.innerHTML = `<img src="${currentPhoto}" style="width:100%; height:100%; object-fit:cover;">`;
             removeBtn.style.display = "block";
         } else {
             avatarDiv.innerHTML = name ? name[0].toUpperCase() : "G";
