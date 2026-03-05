@@ -3,7 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GRANDMA CALL APP</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Grandma Call</title>
+    
+    <link rel="apple-touch-icon" href="https://via.placeholder.com/180/6A5ACD/FFFFFF?text=G">
+
     <style>
         :root {
             --bg-color: #f2f2f2;
@@ -13,7 +19,6 @@
             --ios-red: #FF3B30;
             --ios-dark-bg: #1c1c1e;
             --ios-input-bg: #2c2c2e;
-            --menu-shadow: rgba(0,0,0,0.2);
         }
 
         body {
@@ -28,33 +33,25 @@
             --bg-color: #000000;
             --card-bg: #1c1c1e;
             --text-color: #ffffff;
-            --menu-shadow: rgba(255,255,255,0.1);
         }
 
-        /* HEADER & TOP MENU (Moved to Left) */
+        /* HEADER AREA */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
             margin-bottom: 20px;
         }
 
         .top-left-menu { position: relative; }
-        .dots-btn { 
-            background: none; border: none; font-size: 35px; 
-            color: var(--text-color); cursor: pointer; padding: 10px;
-        }
+        .dots-btn { background: none; border: none; font-size: 35px; color: var(--text-color); cursor: pointer; padding: 10px; }
 
         .menu-dropdown { 
-            display: none; position: absolute; left: 0; top: 60px; /* Aligned Left */
+            display: none; position: absolute; left: 0; top: 60px;
             background: var(--card-bg); border-radius: 15px; 
-            box-shadow: 0 10px 30px var(--menu-shadow); z-index: 2000; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 2000; 
             min-width: 180px; overflow: hidden; border: 1px solid rgba(128,128,128,0.2);
         }
-
-        /* Card Menu stays aligned right inside the card */
-        .card .menu-dropdown { left: auto; right: 0; }
 
         .menu-dropdown button { 
             display: block; width: 100%; padding: 15px 20px; border: none; background: none; 
@@ -62,36 +59,29 @@
             text-align: left; border-bottom: 0.5px solid rgba(128,128,128,0.2);
         }
 
-        /* BIG CONTACT CARDS */
+        /* APP LOGO TOP */
+        .app-logo { width: 60px; height: 60px; border-radius: 15px; margin-bottom: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+
+        .add-btn { 
+            margin: 10px 0 30px 0; padding: 18px 40px; font-size: 22px; 
+            border: none; border-radius: 20px; background: #2196F3; 
+            color: white; cursor: pointer; font-weight: bold; 
+        }
+
+        /* CONTACT CARDS */
         .container { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; }
         .card { 
             background: var(--card-bg); padding: 35px; border-radius: 40px; width: 250px; 
             position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.15); 
         }
-
         .card-menu { position: absolute; top: 15px; right: 20px; }
-        
         .card img, .card .initial-circle { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; margin: 0 auto 15px auto; display: block; }
         .card .initial-circle { background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 70px; color: #555; }
-        
         .name { font-size: 32px; font-weight: 900; margin-bottom: 25px; }
-        
-        .call-btn { 
-            background: #4CAF50; color: white; border: none; padding: 22px; width: 100%; 
-            border-radius: 25px; cursor: pointer; font-size: 26px; font-weight: bold;
-        }
+        .call-btn { background: #4CAF50; color: white; border: none; padding: 22px; width: 100%; border-radius: 25px; cursor: pointer; font-size: 26px; font-weight: bold; }
 
-        .add-btn { 
-            margin: 20px 0 40px 0; padding: 18px 40px; font-size: 22px; 
-            border: none; border-radius: 20px; background: #2196F3; 
-            color: white; cursor: pointer; font-weight: bold; 
-        }
-
-        /* EDIT MODAL */
-        #editModal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--ios-dark-bg); z-index: 3000; flex-direction: column; color: white; overflow-y: auto;
-        }
+        /* MODAL STYLE */
+        #editModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--ios-dark-bg); z-index: 3000; flex-direction: column; color: white; overflow-y: auto; }
         .modal-header { display: flex; justify-content: space-between; padding: 25px; font-size: 32px; }
         .avatar-section { margin-top: 20px; display: flex; flex-direction: column; align-items: center; }
         .big-avatar { width: 180px; height: 180px; background: #4a4a4c; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 100px; overflow: hidden; }
@@ -111,9 +101,13 @@
         </div>
     </div>
     
-    <h1>GRANDMA CALL APP</h1>
+    <div>
+        <img src="https://via.placeholder.com/100/6A5ACD/FFFFFF?text=G" class="app-logo" alt="logo"><br>
+        <span style="font-weight: bold; font-size: 18px;">GRANDMA CALL</span>
+    </div>
     
-    <div style="width: 50px;"></div> </header>
+    <div style="width: 50px;"></div>
+</header>
 
 <button class="add-btn" onclick="openModal()">+ Add New Contact</button>
 
@@ -158,7 +152,7 @@
                 <div class="card">
                     <div class="card-menu">
                         <button class="dots-btn" style="font-size:25px;" onclick="toggleMenu(event, 'cardMenu${i}')">⋮</button>
-                        <div class="menu-dropdown" id="cardMenu${i}">
+                        <div class="menu-dropdown" id="cardMenu${i}" style="left:auto; right:0;">
                             <button onclick="openModal(${i})">✏️ Edit</button>
                             <button onclick="deleteContact(${i})" style="color:var(--ios-red)">🗑️ Delete</button>
                         </div>
