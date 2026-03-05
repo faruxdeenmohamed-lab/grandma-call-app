@@ -63,30 +63,29 @@ justify-content:center;
 gap:20px;
 }
 
-/* Card styling updated for gallery layout */
 .card{
 background:white;
 padding:15px;
 border-radius:20px;
-width:180px; /* slightly wider for gallery */
+width:180px;
 position:relative;
 box-shadow:0 3px 10px rgba(0,0,0,0.2);
 transition: transform 0.2s;
 }
 
 .card:hover{
-transform: scale(1.05); /* subtle zoom effect for gallery feel */
+transform: scale(1.05);
 }
 
 .card img{
-width:120px; /* larger photo */
-height:120px; /* larger photo */
-border-radius:10px; /* slightly less round for gallery style */
+width:120px;
+height:120px;
+border-radius:10px;
 object-fit: cover;
 }
 
 .name{
-font-size:22px; /* increased name size */
+font-size:24px; /* Increased name size */
 margin:10px 0;
 font-weight:bold;
 }
@@ -209,17 +208,15 @@ function addContact(){
 
 let name=prompt("Enter Name");
 let number=prompt("Enter Phone Number");
+let photo=prompt("Enter Photo URL (leave blank for default)");
 
 if(name && number){
-
 contacts.push({
 name:name,
 number:number,
-photo:"Family call.png"
+photo: photo ? photo : "Family call.png"
 });
-
 renderContacts();
-
 }
 
 }
@@ -228,14 +225,13 @@ function editContact(i){
 
 let name=prompt("Edit Name",contacts[i].name);
 let number=prompt("Edit Number",contacts[i].number);
+let photo=prompt("Edit Photo URL", contacts[i].photo);
 
 if(name && number){
-
 contacts[i].name=name;
 contacts[i].number=number;
-
+contacts[i].photo=photo ? photo : "Family call.png";
 renderContacts();
-
 }
 
 }
