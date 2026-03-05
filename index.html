@@ -5,201 +5,122 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<style>                            
-
+<style>
 body{
-font-family: Arial;
-background:#f2f2f2;
-text-align:center;
-margin:0;
-padding:20px;
+  font-family: Arial;
+  background:#f2f2f2;
+  text-align:center;
+  margin:0;
+  padding:20px;
 }
 
-h1{
-margin-bottom:20px;
-}
+h1{ margin-bottom:20px; }
 
-.dark{
-background:#121212;
-color:white;
-}
-
-.dark .card{
-background:#1e1e1e;
-}
-
-.dark button{
-background:#333;
-color:white;
-}
+.dark{ background:#121212;color:white; }
+.dark .card{ background:#1e1e1e; }
+.dark button{ background:#333;color:white; }
 
 .toggle{
-position:fixed;
-top:10px;
-left:10px;
-padding:10px;
-border:none;
-border-radius:10px;
-cursor:pointer;
+  position:fixed; top:10px; left:10px; padding:10px;
+  border:none; border-radius:10px; cursor:pointer;
 }
 
 .add{
-margin-bottom:20px;
-padding:12px 20px;
-font-size:16px;
-border:none;
-border-radius:10px;
-background:#2196F3;
-color:white;
-cursor:pointer;
+  margin-bottom:20px; padding:12px 20px;
+  font-size:16px; border:none; border-radius:10px;
+  background:#2196F3; color:white; cursor:pointer;
 }
 
 .container{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:20px;
+  display:flex; flex-wrap:wrap; justify-content:center; gap:20px;
 }
 
 .card{
-background:white;
-padding:15px;
-border-radius:20px;
-width:180px;
-position:relative;
-box-shadow:0 3px 10px rgba(0,0,0,0.2);
-transition: transform 0.2s;
+  background:white; padding:15px; border-radius:20px;
+  width:180px; position:relative; box-shadow:0 3px 10px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
 }
 
-.card:hover{
-transform: scale(1.05);
-}
+.card:hover{ transform: scale(1.05); }
 
 .card img{
-width:120px;
-height:120px;
-border-radius:10px;
-object-fit: cover;
+  width:120px; height:120px; border-radius:10px; object-fit: cover;
 }
 
 .name{
-font-size:24px;
-margin:10px 0;
-font-weight:bold;
+  font-size:24px; margin:10px 0; font-weight:bold;
 }
 
 .call{
-padding:10px 20px;
-font-size:16px;
-border:none;
-border-radius:10px;
-cursor:pointer;
-background:#4CAF50;
-color:white;
+  padding:10px 20px; font-size:16px;
+  border:none; border-radius:10px; cursor:pointer;
+  background:#4CAF50; color:white;
 }
 
-.menu{
-position:absolute;
-top:5px;
-right:10px;
-}
-
-.menu button{
-background:none;
-border:none;
-font-size:20px;
-cursor:pointer;
-}
-
+.menu{ position:absolute; top:5px; right:10px; }
+.menu button{ background:none; border:none; font-size:20px; cursor:pointer; }
 .menu-options{
-display:none;
-position:absolute;
-right:0;
-background:white;
-border-radius:10px;
-box-shadow:0 2px 6px rgba(0,0,0,0.3);
+  display:none; position:absolute; right:0; background:white;
+  border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.3);
 }
-
 .menu-options button{
-display:block;
-width:100%;
-border:none;
-background:none;
-padding:10px;
-cursor:pointer;
+  display:block; width:100%; border:none; background:none; padding:10px; cursor:pointer;
 }
 
-footer{
-margin-top:30px;
-font-size:14px;
-}
+footer{ margin-top:30px; font-size:14px; }
 
-#photoInput {
-  display: none;
-}
-
+#photoInput{ display:none; } /* hidden file input */
 </style>
-
 </head>
 
 <body>
 
 <button class="toggle" onclick="toggleDark()">🌙</button>
-
 <h1>GRANDMA CALL APP</h1>
-
 <button class="add" onclick="triggerAddContact()">Add Contact</button>
-
 <div class="container" id="contacts"></div>
 
-<!-- File input for photo -->
 <input type="file" id="photoInput" accept="image/*">
 
-<footer>
-By FARDEEN
-</footer>
+<footer>By FARDEEN</footer>
 
 <script>
-
 let contacts = [
-{name:"Fardeen",number:"1234567890",photo:"Family call.png"}
+  {name:"Fardeen",number:"1234567890",photo:"Family call.png"}
 ];
 
 let tempContact = {};
 let editIndex = null;
 
+// Render contacts
 function renderContacts(){
   const container=document.getElementById("contacts");
   container.innerHTML="";
   contacts.forEach((c,i)=>{
     container.innerHTML+=`
-    <div class="card">
-      <div class="menu">
-        <button onclick="toggleMenu(${i})">⋮</button>
-        <div class="menu-options" id="menu${i}">
-          <button onclick="triggerEditContact(${i})">Edit</button>
-          <button onclick="deleteContact(${i})">Delete</button>
+      <div class="card">
+        <div class="menu">
+          <button onclick="toggleMenu(${i})">⋮</button>
+          <div class="menu-options" id="menu${i}">
+            <button onclick="triggerEditContact(${i})">Edit</button>
+            <button onclick="deleteContact(${i})">Delete</button>
+          </div>
         </div>
-      </div>
-      <img src="${c.photo}" alt="${c.name}">
-      <div class="name">${c.name}</div>
-      <button class="call" onclick="callNumber('${c.number}')">Call</button>
-    </div>`;
+        <img src="${c.photo}" alt="${c.name}">
+        <div class="name">${c.name}</div>
+        <button class="call" onclick="callNumber('${c.number}')">Call</button>
+      </div>`;
   });
 }
 
-function callNumber(num){
-  window.location.href="tel:"+num;
-}
+function callNumber(num){ window.location.href="tel:"+num; }
 
 function toggleMenu(i){
   const menu=document.getElementById("menu"+i);
-  menu.style.display=menu.style.display=="block"?"none":"block";
+  menu.style.display = menu.style.display=="block"?"none":"block";
 }
 
-// =====================
 // Add Contact
-// =====================
 function triggerAddContact(){
   const name = prompt("Enter Name");
   const number = prompt("Enter Phone Number");
@@ -210,9 +131,7 @@ function triggerAddContact(){
   }
 }
 
-// =====================
 // Edit Contact
-// =====================
 function triggerEditContact(i){
   editIndex = i;
   const name = prompt("Edit Name", contacts[i].name);
@@ -223,9 +142,7 @@ function triggerEditContact(i){
   }
 }
 
-// =====================
-// File input change
-// =====================
+// Handle file selection
 document.getElementById("photoInput").addEventListener("change", function(e){
   const file = e.target.files[0];
   if(file){
@@ -241,9 +158,7 @@ document.getElementById("photoInput").addEventListener("change", function(e){
   this.value = '';
 });
 
-// =====================
-// Finalize Add/Edit Contact
-// =====================
+// Finalize add/edit
 function finalizeContact(){
   if(editIndex !== null){
     contacts[editIndex] = tempContact;
@@ -255,6 +170,7 @@ function finalizeContact(){
   renderContacts();
 }
 
+// Delete contact
 function deleteContact(i){
   if(confirm("Delete Contact?")){
     contacts.splice(i,1);
@@ -266,8 +182,8 @@ function toggleDark(){
   document.body.classList.toggle("dark");
 }
 
+// Initial render
 renderContacts();
-
 </script>
 
 </body>
