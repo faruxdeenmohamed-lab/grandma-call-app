@@ -1,220 +1,255 @@
+```html
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>GRANDMA CALL APP</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="manifest" href="manifest.json">
+<title>GRANDMA CALL APP</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f2f2f2;
-      text-align: center;
-      margin: 0;
-      padding: 20px;
-    }
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    h1 {
-      margin-bottom: 20px;
-    }
+<link rel="manifest" href="manifest.json">
 
-    .dark {
-      background: #121212;
-      color: white;
-    }
+<style>
 
-    .dark .card {
-      background: #1e1e1e;
-    }
+body{
+font-family: Arial;
+background:#f2f2f2;
+text-align:center;
+margin:0;
+padding:20px;
+}
 
-    .dark button {
-      background: #333;
-      color: white;
-    }
+h1{
+margin-bottom:20px;
+}
 
-    .toggle {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      padding: 10px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-    }
+.dark{
+background:#121212;
+color:white;
+}
 
-    .add {
-      margin-bottom: 20px;
-      padding: 12px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 10px;
-      background: #2196F3;
-      color: white;
-      cursor: pointer;
-    }
+.dark .card{
+background:#1e1e1e;
+}
 
-    .container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-    }
+.dark button{
+background:#333;
+color:white;
+}
 
-    .card {
-      background: white;
-      padding: 15px;
-      border-radius: 20px;
-      width: 160px;
-      position: relative;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-    }
+.toggle{
+position:fixed;
+top:10px;
+left:10px;
+padding:10px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+}
 
-    .card img {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-    }
+.add{
+margin-bottom:20px;
+padding:12px 20px;
+font-size:16px;
+border:none;
+border-radius:10px;
+background:#2196F3;
+color:white;
+cursor:pointer;
+}
 
-    .name {
-      font-size: 18px;
-      margin: 10px 0;
-    }
+.container{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:20px;
+}
 
-    .call {
-      padding: 10px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      background: #4CAF50;
-      color: white;
-    }
+.card{
+background:white;
+padding:15px;
+border-radius:20px;
+width:160px;
+position:relative;
+box-shadow:0 3px 10px rgba(0,0,0,0.2);
+}
 
-    .menu {
-      position: absolute;
-      top: 5px;
-      right: 10px;
-    }
+.card img{
+width:100px;
+height:100px;
+border-radius:50%;
+}
 
-    .menu button {
-      background: none;
-      border: none;
-      font-size: 20px;
-      cursor: pointer;
-    }
+.name{
+font-size:18px;
+margin:10px 0;
+}
 
-    .menu-options {
-      display: none;
-      position: absolute;
-      right: 0;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    }
+.call{
+padding:10px 20px;
+font-size:16px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+background:#4CAF50;
+color:white;
+}
 
-    .menu-options button {
-      display: block;
-      width: 100%;
-      border: none;
-      background: none;
-      padding: 10px;
-      cursor: pointer;
-    }
+.menu{
+position:absolute;
+top:5px;
+right:10px;
+}
 
-    footer {
-      margin-top: 30px;
-      font-size: 14px;
-    }
-  </style>
+.menu button{
+background:none;
+border:none;
+font-size:20px;
+cursor:pointer;
+}
+
+.menu-options{
+display:none;
+position:absolute;
+right:0;
+background:white;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,0.3);
+}
+
+.menu-options button{
+display:block;
+width:100%;
+border:none;
+background:none;
+padding:10px;
+cursor:pointer;
+}
+
+footer{
+margin-top:30px;
+font-size:14px;
+}
+
+</style>
+
 </head>
 
 <body>
-  <button class="toggle" onclick="toggleDark()">🌙</button>
 
-  <h1>GRANDMA CALL APP</h1>
+<button class="toggle" onclick="toggleDark()">🌙</button>
 
-  <button class="add" onclick="addContact()">Add Contact</button>
+<h1>GRANDMA CALL APP</h1>
 
-  <div class="container" id="contacts"></div>
+<button class="add" onclick="addContact()">Add Contact</button>
 
-  <footer>
-    By FARDEEN
-  </footer>
+<div class="container" id="contacts"></div>
 
-  <script>
-    let contacts = [
-      {name:"Fardeen", number:"1234567890", photo:"Family call.png"}
-    ];
+<footer>
+By FARDEEN
+</footer>
 
-    function renderContacts() {
-      const container = document.getElementById("contacts");
-      container.innerHTML = "";
+<script>
 
-      contacts.forEach((c, i) => {
-        container.innerHTML += `
-          <div class="card">
-            <div class="menu">
-              <button onclick="toggleMenu(${i})">⋮</button>
-              <div class="menu-options" id="menu${i}">
-                <button onclick="editContact(${i})">Edit</button>
-                <button onclick="deleteContact(${i})">Delete</button>
-              </div>
-            </div>
-            <img src="${c.photo}" alt="${c.name}">
-            <div class="name">${c.name}</div>
-            <button class="call" onclick="callNumber('${c.number}')">Call</button>
-          </div>
-        `;
-      });
-    }
+let contacts = [
+{name:"Fardeen",number:"1234567890",photo:"Family call.png"}
+];
 
-    function callNumber(num) {
-      window.location.href = "tel:" + num;
-    }
+function renderContacts(){
 
-    function toggleMenu(i) {
-      const menu = document.getElementById("menu" + i);
-      menu.style.display = menu.style.display === "block" ? "none" : "block";
-    }
+let container=document.getElementById("contacts");
+container.innerHTML="";
 
-    function addContact() {
-      const name = prompt("Enter Name");
-      const number = prompt("Enter Phone Number");
+contacts.forEach((c,i)=>{
 
-      if (name && number) {
-        contacts.push({
-          name: name,
-          number: number,
-          photo: "Family call.png"
-        });
-        renderContacts();
-      }
-    }
+container.innerHTML+=`
+<div class="card">
 
-    function editContact(i) {
-      const name = prompt("Edit Name", contacts[i].name);
-      const number = prompt("Edit Number", contacts[i].number);
+<div class="menu">
+<button onclick="toggleMenu(${i})">⋮</button>
 
-      if (name && number) {
-        contacts[i].name = name;
-        contacts[i].number = number;
-        renderContacts();
-      }
-    }
+<div class="menu-options" id="menu${i}">
+<button onclick="editContact(${i})">Edit</button>
+<button onclick="deleteContact(${i})">Delete</button>
+</div>
+</div>
 
-    function deleteContact(i) {
-      if (confirm("Delete Contact?")) {
-        contacts.splice(i, 1);
-        renderContacts();
-      }
-    }
+<img src="${c.photo}">
 
-    function toggleDark() {
-      document.body.classList.toggle("dark");
-    }
+<div class="name">${c.name}</div>
 
-    renderContacts();
-  </script>
+<button class="call" onclick="callNumber('${c.number}')">Call</button>
+
+</div>
+`;
+
+});
+
+}
+
+function callNumber(num){
+window.location.href="tel:"+num;
+}
+
+function toggleMenu(i){
+
+let menu=document.getElementById("menu"+i);
+
+menu.style.display=menu.style.display=="block"?"none":"block";
+
+}
+
+function addContact(){
+
+let name=prompt("Enter Name");
+let number=prompt("Enter Phone Number");
+
+if(name && number){
+
+contacts.push({
+name:name,
+number:number,
+photo:"Family call.png"
+});
+
+renderContacts();
+
+}
+
+}
+
+function editContact(i){
+
+let name=prompt("Edit Name",contacts[i].name);
+let number=prompt("Edit Number",contacts[i].number);
+
+if(name && number){
+
+contacts[i].name=name;
+contacts[i].number=number;
+
+renderContacts();
+
+}
+
+}
+
+function deleteContact(i){
+
+if(confirm("Delete Contact?")){
+contacts.splice(i,1);
+renderContacts();
+}
+
+}
+
+function toggleDark(){
+document.body.classList.toggle("dark");
+}
+
+renderContacts();
+
+</script>
+
 </body>
 </html>
+```
