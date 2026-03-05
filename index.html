@@ -6,7 +6,9 @@
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="https://r.jina.ai/i/9e075368688448ec88916327c5144b67">
+    
+    <link rel="apple-touch-icon" href="https://r.jina.ai/i/05e2786317bc42f5829671f6540c49bc">
+    
     <title>Grandma Call</title>
 
     <style>
@@ -40,7 +42,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            padding-top: 10px;
         }
 
         .top-left-menu { position: relative; }
@@ -59,8 +62,7 @@
             text-align: left; border-bottom: 0.5px solid rgba(128,128,128,0.2);
         }
 
-        /* APP LOGO */
-        .app-logo { width: 70px; height: 70px; border-radius: 18px; margin-bottom: 5px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        h1 { margin: 0; font-size: 24px; letter-spacing: 1px; flex-grow: 1; font-weight: 800; }
 
         .add-btn { 
             margin: 10px 0 30px 0; padding: 18px 40px; font-size: 22px; 
@@ -82,17 +84,13 @@
         .name { font-size: 32px; font-weight: 900; margin-bottom: 25px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .call-btn { background: #4CAF50; color: white; border: none; padding: 22px; width: 100%; border-radius: 25px; cursor: pointer; font-size: 26px; font-weight: bold; box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3); }
 
-        /* IOS EDIT MODAL */
+        /* MODAL */
         #editModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--ios-dark-bg); z-index: 3000; flex-direction: column; color: white; overflow-y: auto; }
         .modal-header { display: flex; justify-content: space-between; padding: 25px; font-size: 35px; }
-        
         .avatar-section { margin-top: 20px; display: flex; flex-direction: column; align-items: center; }
         .big-avatar { width: 180px; height: 180px; background: #4a4a4c; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 100px; overflow: hidden; }
-        .big-avatar img { width: 100%; height: 100%; object-fit: cover; }
-        
         .input-list { background: var(--ios-input-bg); margin: 30px 20px; border-radius: 20px; overflow: hidden; text-align: left; }
         .input-list input { width: 100%; background: none; border: none; padding: 22px; color: white; font-size: 20px; outline: none; border-bottom: 0.5px solid #3a3a3c; }
-        .input-list input:last-child { border-bottom: none; }
 
         footer { margin: 60px 0; opacity: 0.5; font-size: 16px; font-weight: bold; }
     </style>
@@ -107,10 +105,7 @@
         </div>
     </div>
     
-    <div>
-        <img src="https://r.jina.ai/i/9e075368688448ec88916327c5144b67" class="app-logo" alt="logo"><br>
-        <span style="font-weight: bold; font-size: 18px; letter-spacing: 1px;">GRANDMA CALL</span>
-    </div>
+    <h1>GRANDMA CALL APP</h1>
     
     <div style="width: 50px;"></div>
 </header>
@@ -127,8 +122,8 @@
     <div class="avatar-section">
         <div class="big-avatar" id="modalAvatar">G</div>
         <div style="display:flex; gap:25px; margin-top:20px;">
-            <button style="color:var(--ios-blue); background:none; border:none; font-size:20px; font-weight:bold; cursor:pointer;" onclick="document.getElementById('fileInput').click()">Add Photo</button>
-            <button id="removeBtn" style="color:var(--ios-red); background:none; border:none; font-size:20px; font-weight:bold; display:none; cursor:pointer;" onclick="removePhoto()">Remove</button>
+            <button style="color:var(--ios-blue); background:none; border:none; font-size:20px; font-weight:bold;" onclick="document.getElementById('fileInput').click()">Add Photo</button>
+            <button id="removeBtn" style="color:var(--ios-red); background:none; border:none; font-size:20px; font-weight:bold; display:none;" onclick="removePhoto()">Remove</button>
         </div>
     </div>
     <div class="input-list">
@@ -143,7 +138,6 @@
 <footer>By FARDEEN</footer>
 
 <script>
-    // Save contacts to phone storage so they don't disappear
     let contacts = JSON.parse(localStorage.getItem('grandma_contacts')) || [
         {name: "Fardeen", number: "9360697683", photo: null, company: "Admin"}
     ];
@@ -223,7 +217,7 @@
     function saveContact() {
         const name = document.getElementById("nameInp").value;
         const number = document.getElementById("numInp").value;
-        if (!name || !number) return alert("Please enter a name and number.");
+        if (!name || !number) return alert("Enter Name and Number");
         const data = { name, number, photo: currentPhoto, company: document.getElementById("compInp").value };
         if (editIdx !== null) contacts[editIdx] = data;
         else contacts.push(data);
@@ -232,7 +226,7 @@
     }
 
     function deleteContact(i) {
-        if(confirm("Are you sure you want to delete this contact?")) {
+        if(confirm("Delete this contact?")) {
             contacts.splice(i, 1);
             render();
         }
