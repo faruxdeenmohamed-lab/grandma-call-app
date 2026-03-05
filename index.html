@@ -1,161 +1,170 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 <title>Grandma Call App</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link rel="manifest" href="manifest.json">
 
 <style>
 
 body{
-margin:0;
-font-family:Arial;
-background:#eef2f7;
+font-family: Arial;
+background:#f2f2f2;
 text-align:center;
+margin:0;
+padding:20px;
 }
 
-header{
-background:#4CAF50;
+h1{
+margin-bottom:20px;
+}
+
+.dark{
+background:#121212;
 color:white;
-padding:20px;
-font-size:32px;
-font-weight:bold;
+}
+
+.dark .card{
+background:#1e1e1e;
+}
+
+.dark button{
+background:#333;
+color:white;
+}
+
+.toggle{
+position:fixed;
+top:10px;
+left:10px;
+padding:10px;
+border:none;
+border-radius:10px;
+cursor:pointer;
 }
 
 .container{
 display:flex;
 flex-wrap:wrap;
 justify-content:center;
-padding:20px;
+gap:20px;
 }
 
 .card{
 background:white;
-margin:15px;
-padding:20px;
+padding:15px;
 border-radius:20px;
-width:220px;
-box-shadow:0 6px 15px rgba(0,0,0,0.15);
+width:150px;
 position:relative;
-transition:0.2s;
-}
-
-.card:hover{
-transform:scale(1.05);
+box-shadow:0 3px 10px rgba(0,0,0,0.2);
 }
 
 .card img{
-width:150px;
-height:150px;
+width:100px;
+height:100px;
 border-radius:50%;
-object-fit:cover;
-border:4px solid #4CAF50;
 }
 
-.callbtn{
-width:180px;
-height:55px;
-font-size:20px;
+.name{
+font-size:18px;
+margin:10px 0;
+}
+
+.call{
+padding:10px 20px;
+font-size:16px;
 border:none;
-border-radius:12px;
-margin-top:12px;
+border-radius:10px;
+cursor:pointer;
 background:#4CAF50;
 color:white;
-cursor:pointer;
 }
 
-.editbtn{
+.menu{
 position:absolute;
-top:10px;
-right:40px;
-background:#ff9800;
-border:none;
-border-radius:8px;
-padding:6px 10px;
-cursor:pointer;
-color:white;
-font-size:16px;
-}
-
-.deletebtn{
-position:absolute;
-top:10px;
+top:5px;
 right:10px;
-background:red;
-border:none;
-border-radius:8px;
-padding:6px 10px;
-cursor:pointer;
-color:white;
-font-size:16px;
 }
 
-.addbtn{
-background:#2196F3;
-color:white;
-width:240px;
-height:60px;
-font-size:22px;
+.menu button{
+background:none;
 border:none;
-border-radius:14px;
-margin:25px;
+font-size:20px;
 cursor:pointer;
 }
 
-.footer{
+.menu-options{
+display:none;
+position:absolute;
+right:0;
+background:white;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,0.3);
+}
+
+.menu-options button{
+display:block;
+width:100%;
+border:none;
+background:none;
+padding:10px;
+cursor:pointer;
+}
+
+footer{
 margin-top:30px;
-padding:20px;
-color:#555;
-font-size:16px;
+font-size:14px;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<header>
-📞 Call Family
-</header>
+<button class="toggle" onclick="toggleDark()">🌙</button>
 
-<button class="addbtn" onclick="addContact()">➕ Add Contact</button>
+<h1>Grandma Call App</h1>
 
-<div class="container" id="contactList"></div>
+<div class="container" id="contacts"></div>
 
-<input type="file" id="photoInput" style="display:none">
-
-<div class="footer">
-Made by <b>FARDEEN</b>
-</div>
+<footer>
+By FARDEEN
+</footer>
 
 <script>
 
-let contacts = JSON.parse(localStorage.getItem("contacts")) || [];
-
-function saveContacts(){
-localStorage.setItem("contacts", JSON.stringify(contacts));
-}
+let contacts = [
+{name:"Fardeen",number:"1234567890",photo:"Family call.png"},
+{name:"Mom",number:"9876543210",photo:"Family call.png"}
+];
 
 function renderContacts(){
 
-let list = document.getElementById("contactList");
-list.innerHTML="";
+let container = document.getElementById("contacts");
+container.innerHTML="";
 
 contacts.forEach((c,i)=>{
 
-list.innerHTML += `
+container.innerHTML += `
 <div class="card">
 
-<button class="editbtn" onclick="editContact(${i})">✏️</button>
-<button class="deletebtn" onclick="deleteContact(${i})">🗑</button>
+<div class="menu">
+<button onclick="toggleMenu(${i})">⋮</button>
+
+<div class="menu-options" id="menu${i}">
+<button onclick="editContact(${i})">Edit</button>
+<button onclick="deleteContact(${i})">Delete</button>
+</div>
+</div>
 
 <img src="${c.photo}">
-<br>
 
-<button class="callbtn" onclick="callNumber('${c.number}')">
-Call ${c.name}
-</button>
+<div class="name">${c.name}</div>
+
+<button class="call" onclick="callNumber('${c.number}')">Call</button>
 
 </div>
 `;
@@ -168,84 +177,42 @@ function callNumber(num){
 window.location.href="tel:"+num;
 }
 
-function addContact(){
+function toggleMenu(i){
 
-let name = prompt("Enter Name");
-let number = prompt("Enter Phone Number");
+let menu = document.getElementById("menu"+i);
 
-if(!name || !number) return;
-
-let input = document.getElementById("photoInput");
-
-input.onchange=function(){
-
-let file = input.files[0];
-let reader = new FileReader();
-
-reader.onload=function(e){
-
-contacts.push({
-name:name,
-number:number,
-photo:e.target.result
-});
-
-saveContacts();
-renderContacts();
-
-};
-
-reader.readAsDataURL(file);
-
-};
-
-input.click();
+menu.style.display = menu.style.display=="block" ? "none":"block";
 
 }
 
 function editContact(i){
 
-let name = prompt("New Name",contacts[i].name);
-let number = prompt("New Number",contacts[i].number);
+let name = prompt("Edit Name",contacts[i].name);
+let number = prompt("Edit Number",contacts[i].number);
 
-if(!name || !number) return;
+if(name && number){
 
 contacts[i].name=name;
 contacts[i].number=number;
 
-let input = document.getElementById("photoInput");
-
-input.onchange=function(){
-
-let file = input.files[0];
-let reader = new FileReader();
-
-reader.onload=function(e){
-
-contacts[i].photo=e.target.result;
-
-saveContacts();
 renderContacts();
 
-};
-
-reader.readAsDataURL(file);
-
-};
-
-input.click();
+}
 
 }
 
 function deleteContact(i){
 
-if(confirm("Delete this contact?")){
-
+if(confirm("Delete Contact?")){
 contacts.splice(i,1);
-saveContacts();
 renderContacts();
+}
 
 }
+
+function toggleDark(){
+
+document.body.classList.toggle("dark");
 
 }
 
