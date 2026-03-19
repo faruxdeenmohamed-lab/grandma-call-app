@@ -71,11 +71,20 @@
 
         .container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 20px;
     width: 100%;
     max-width: 900px;
     margin: 0 auto;
+}
+
+.card {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+body {
+    overflow-x: hidden;
 }
 
 body {
@@ -289,5 +298,3 @@ body {
 </script>
 </body>
 </html>
-
-
