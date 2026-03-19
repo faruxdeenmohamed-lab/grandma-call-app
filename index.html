@@ -1,336 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    <link rel="apple-touch-icon" href="https://r.jina.ai/i/05e2786317bc42f5829671f6540c49bc">
-    
-    <title>Grandma Call</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Grandma Call</title>
 
-    <style>
-        :root {
-            --bg-color: #f2f2f2;
-            --card-bg: #ffffff;
-            --text-color: #000000;
-            --ios-blue: #0A84FF;
-            --ios-red: #FF3B30;
-            --ios-dark-bg: #1c1c1e;
-            --ios-input-bg: #2c2c2e;
-            --ios-modal-bg: #242426;
-        }
+<style>
+:root {
+    --bg-color: #f2f2f2;
+    --card-bg: #ffffff;
+    --text-color: #000000;
+}
 
-        body {
+body {
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     background: var(--bg-color);
-    color: var(--text-color);
     margin: 0;
-    padding: 20px;
+    padding: 15px;
     text-align: center;
-    transition: 0.3s;
-    -webkit-tap-highlight-color: transparent;
     overflow-x: hidden;
 }
 
-* {
-    box-sizing: border-box;
+h1 {
+    font-size: 20px;
+    margin-bottom: 20px;
 }
 
-        .dark {
-            --bg-color: #000000;
-            --card-bg: #1c1c1e;
-            --text-color: #ffffff;
-        }
+.add-btn {
+    padding: 15px 30px;
+    font-size: 18px;
+    border-radius: 20px;
+    border: none;
+    background: #007AFF;
+    color: white;
+    margin-bottom: 20px;
+}
 
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .top-left-menu { position: relative; }
-        .dots-btn { background: none; border: none; font-size: 35px; color: var(--text-color); cursor: pointer; padding: 10px; }
-
-        .menu-dropdown { 
-            display: none; position: absolute; left: 0; top: 60px;
-            background: var(--card-bg); border-radius: 15px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 2000; 
-            min-width: 180px; overflow: hidden; border: 1px solid rgba(128,128,128,0.2);
-        }
-
-        .menu-dropdown button { 
-            display: block; width: 100%; padding: 18px 20px; border: none; background: none; 
-            cursor: pointer; font-size: 18px; font-weight: bold; color: var(--text-color);
-            text-align: left; border-bottom: 0.5px solid rgba(128,128,128,0.2);
-        }
-
-        h1 { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: 0.5px; }
-
-        .add-btn { 
-            margin-bottom: 30px; padding: 18px 40px; font-size: 20px; 
-            border: none; border-radius: 20px; background: #007AFF; 
-            color: white; cursor: pointer; font-weight: bold; 
-        }
-
-        .container {
+.container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
-    width: 100%;
-    padding: 0 10px;
 }
 
-@media (min-width: 769px) {
+@media (min-width: 768px) {
     .container {
         grid-template-columns: repeat(3, 1fr);
         max-width: 900px;
-        margin: 0 auto;
+        margin: auto;
     }
-}
-
-@media (min-width: 769px) {
-    .container {
-        grid-template-columns: repeat(3, 1fr);
-        max-width: 900px;
-    }
-}
-
-@media (max-width: 768px) {
-    .container {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
 }
 
 .card {
     background: var(--card-bg);
-    padding: 20px;
+    padding: 15px;
     border-radius: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.initial-circle {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: #333;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
+    margin: auto;
+}
+
+.name {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.call-btn {
+    background: #34C759;
+    color: white;
+    border: none;
+    padding: 12px;
     width: 100%;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    border-radius: 15px;
+    font-size: 16px;
 }
-
-.card {
-    width: 100%;
-    box-sizing: border-box;
-}
-
-body {
-    overflow-x: hidden;
-}
-
-body {
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-
-.card {
-    width: 100%;
-}
-        .card { 
-            background: var(--card-bg); padding: 30px; border-radius: 35px; width: 240px; 
-            position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.1); 
-            transition: 0.3s;
-        }
-
-        .card:hover {
-            transform: scale(1.05);
-        }
-
-        .card-menu { position: absolute; top: 15px; right: 20px; }
-        .card img, .card .initial-circle { width: 140px; height: 140px; border-radius: 50%; object-fit: cover; margin: 0 auto 15px auto; display: block; }
-        .card .initial-circle { background: linear-gradient(135deg, #4b4b4d, #2c2c2e); display: flex; align-items: center; justify-content: center; font-size: 65px; color: white; }
-        .name { font-size: 28px; font-weight: 800; margin-bottom: 20px; }
-
-        .call-btn { 
-            background: #34C759; 
-            color: white; 
-            border: none; 
-            padding: 25px; 
-            width: 100%; 
-            border-radius: 22px; 
-            cursor: pointer; 
-            font-size: 26px; 
-            font-weight: bold; 
-        }
-
-        #editModal { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: var(--ios-modal-bg); z-index: 3000; flex-direction: column; color: white; 
-        }
-
-        .modal-header { display: flex; justify-content: space-between; padding: 20px; align-items: center; }
-        .close-btn, .save-btn { background: #3a3a3c; color: white; border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        .save-btn { color: #34C759; }
-
-        .modal-avatar-container { margin: 10px 0; display: flex; flex-direction: column; align-items: center; }
-        .big-avatar { 
-            width: 180px; height: 180px; 
-            background: linear-gradient(180deg, #4e4e50, #2c2c2e); 
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-            font-size: 90px; color: white; overflow: hidden; margin-bottom: 15px;
-        }
-        .big-avatar img { width: 100%; height: 100%; object-fit: cover; }
-
-        .ios-add-photo { background: #3a3a3c; color: white; padding: 10px 20px; border-radius: 20px; cursor: pointer; border: none; }
-
-        .ios-input-group { background: #2c2c2e; margin: 20px; border-radius: 12px; text-align: left; }
-        .ios-input-group input { width: 100%; background: none; border: none; padding: 18px; color: white; font-size: 18px; outline: none; }
-
-        footer { margin: 40px 0; opacity: 0.4; font-size: 14px; }
-    </style>
+</style>
 </head>
+
 <body>
 
-<header>
-    <div class="top-left-menu">
-        <button class="dots-btn" onclick="toggleMenu(event, 'topMenu')">⋮</button>
-        <div class="menu-dropdown" id="topMenu">
-            <button onclick="openModal()">➕ Add Contact</button>
-            <button onclick="toggleDark()">🌙 Toggle Theme</button>
-        </div>
-    </div>
-    <h1>GRANDMA CALL APP</h1>
-    <div style="width: 50px;"></div>
-</header>
+<h1>GRANDMA CALL APP</h1>
+<button class="add-btn" onclick="addContact()">+ New Contact</button>
 
-<button class="add-btn" onclick="openModal()">+ New Contact</button>
-
-<div class="container" id="contactsGrid"></div>
-
-<div id="editModal">
-    <div class="modal-header">
-        <div class="close-btn" onclick="closeModal()">✕</div>
-        <div class="save-btn" onclick="saveContact()">✓</div>
-    </div>
-    
-    <div class="modal-avatar-container">
-        <div class="big-avatar" id="modalAvatar">G</div>
-        <button class="ios-add-photo" onclick="document.getElementById('fileInput').click()">Add Photo</button>
-        <button id="removeBtn" style="color:var(--ios-red); background:none; border:none; margin-top:10px; display:none;" onclick="removePhoto()">Remove Photo</button>
-    </div>
-
-    <div class="ios-input-group">
-        <input type="text" id="nameInp" placeholder="Name" oninput="updateInitial()">
-        <input type="text" id="compInp" placeholder="Company/Room No.">
-        <input type="tel" id="numInp" placeholder="Phone Number">
-    </div>
-
-    <button onclick="deleteContact()" id="delBtnModal" style="color:var(--ios-red); background:none; border:none; margin-top:10px; display:none;">Delete Contact</button>
-</div>
-
-<input type="file" id="fileInput" accept="image/*" capture="environment" style="display:none" onchange="handleImage(this)">
-
-<footer>By FARDEEN</footer>
+<div class="container" id="contacts"></div>
 
 <script>
-    let contacts = JSON.parse(localStorage.getItem('grandma_contacts')) || [];
-    let editIdx = null;
-    let currentPhoto = null;
+let contacts = JSON.parse(localStorage.getItem('contacts')) || [];
 
-    function render() {
-        const grid = document.getElementById("contactsGrid");
-        grid.innerHTML = "";
-        contacts.forEach((c, i) => {
-            const avatar = c.photo ? `<img src="${c.photo}">` : `<div class="initial-circle">${c.name ? c.name[0].toUpperCase() : '?'}</div>`;
-            grid.innerHTML += `
-                <div class="card">
-                    <div class="card-menu">
-                        <button class="dots-btn" style="font-size:25px;" onclick="toggleMenu(event, 'cardMenu${i}')">⋮</button>
-                        <div class="menu-dropdown" id="cardMenu${i}" style="left:auto; right:0;">
-                            <button onclick="openModal(${i})">✏️ Edit</button>
-                        </div>
-                    </div>
-                    ${avatar}
-                    <div class="name">${c.name}</div>
-                    <button class="call-btn" onclick="directCall('${c.number}')">📞 CALL</button>
-                </div>`;
-        });
-        localStorage.setItem('grandma_contacts', JSON.stringify(contacts));
-    }
+function render() {
+    const box = document.getElementById('contacts');
+    box.innerHTML = '';
 
-    function directCall(num) {
-        window.location.href = "tel:" + num;
-    }
+    contacts.forEach((c, i) => {
+        box.innerHTML += `
+        <div class="card">
+            <div class="initial-circle">${c.name[0].toUpperCase()}</div>
+            <div class="name">${c.name}</div>
+            <button class="call-btn" onclick="callNow('${c.number}')">📞 CALL</button>
+        </div>`;
+    });
 
-    function toggleMenu(event, menuId) {
-        event.stopPropagation();
-        const allMenus = document.querySelectorAll('.menu-dropdown');
-        allMenus.forEach(m => { if(m.id !== menuId) m.style.display = 'none'; });
-        const target = document.getElementById(menuId);
-        target.style.display = target.style.display === 'block' ? 'none' : 'block';
-    }
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+}
 
-    window.onclick = () => { document.querySelectorAll('.menu-dropdown').forEach(m => m.style.display = 'none'); }
+function addContact() {
+    let name = prompt("Enter Name");
+    let number = prompt("Enter Number");
 
-    function openModal(idx = null) {
-        editIdx = idx;
-        document.getElementById("editModal").style.display = "flex";
-        document.getElementById("delBtnModal").style.display = idx !== null ? "block" : "none";
-        
-        if (idx !== null) {
-            document.getElementById("nameInp").value = contacts[idx].name;
-            document.getElementById("numInp").value = contacts[idx].number;
-            document.getElementById("compInp").value = contacts[idx].company || "";
-            currentPhoto = contacts[idx].photo;
-        } else {
-            document.getElementById("nameInp").value = "";
-            document.getElementById("numInp").value = "";
-            document.getElementById("compInp").value = "";
-            currentPhoto = null;
-        }
-        updateInitial();
-    }
-
-    function updateInitial() {
-        const name = document.getElementById("nameInp").value;
-        const avatarDiv = document.getElementById("modalAvatar");
-        const removeBtn = document.getElementById("removeBtn");
-        if (currentPhoto) {
-            avatarDiv.innerHTML = `<img src="${currentPhoto}">`;
-            removeBtn.style.display = "block";
-        } else {
-            avatarDiv.innerHTML = name ? name[0].toUpperCase() : "G";
-            removeBtn.style.display = "none";
-        }
-    }
-
-    function handleImage(input) {
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = (e) => { currentPhoto = e.target.result; updateInitial(); };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    function saveContact() {
-        const name = document.getElementById("nameInp").value;
-        const number = document.getElementById("numInp").value;
-        if (!name || !number) return alert("Enter Name and Number");
-        const data = { name, number, photo: currentPhoto, company: document.getElementById("compInp").value };
-        if (editIdx !== null) contacts[editIdx] = data;
-        else contacts.push(data);
-        closeModal();
+    if(name && number) {
+        contacts.push({name, number});
         render();
     }
+}
 
-    function deleteContact() {
-        if(confirm("Delete this contact?")) {
-            contacts.splice(editIdx, 1);
-            closeModal();
-            render();
-        }
-    }
+function callNow(num) {
+    window.location.href = "tel:" + num;
+}
 
-    function removePhoto() { currentPhoto = null; updateInitial(); }
-    function closeModal() { document.getElementById("editModal").style.display = "none"; }
-    function toggleDark() { document.body.classList.toggle("dark"); }
-
-    render();
+render();
 </script>
+
 </body>
 </html>
