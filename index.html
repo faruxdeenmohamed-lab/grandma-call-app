@@ -24,13 +24,20 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-color);
-            color: var(--text-color);
-            margin: 0; padding: 20px;
-            text-align: center; transition: 0.3s;
-            -webkit-tap-highlight-color: transparent;
-        }
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+    transition: 0.3s;
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
+}
+
+* {
+    box-sizing: border-box;
+}
 
         .dark {
             --bg-color: #000000;
@@ -310,4 +317,3 @@ body {
 </script>
 </body>
 </html>
-
