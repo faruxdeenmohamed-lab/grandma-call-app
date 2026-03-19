@@ -2,38 +2,29 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Grandma Call</title>
 
 <style>
-:root {
-    --bg-color: #f2f2f2;
-    --card-bg: #ffffff;
-    --text-color: #000000;
-}
-
 body {
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--bg-color);
+    font-family: -apple-system, sans-serif;
     margin: 0;
     padding: 15px;
     text-align: center;
+    background: #f2f2f2;
     overflow-x: hidden;
 }
 
-h1 {
-    font-size: 20px;
-    margin-bottom: 20px;
-}
+h1 { font-size: 20px; }
 
 .add-btn {
     padding: 15px 30px;
-    font-size: 18px;
-    border-radius: 20px;
     border: none;
+    border-radius: 20px;
     background: #007AFF;
     color: white;
-    margin-bottom: 20px;
+    font-size: 18px;
+    margin: 15px 0;
 }
 
 .container {
@@ -42,47 +33,58 @@ h1 {
     gap: 12px;
 }
 
-@media (min-width: 768px) {
+@media (min-width:768px) {
     .container {
-        grid-template-columns: repeat(3, 1fr);
-        max-width: 900px;
-        margin: auto;
+        grid-template-columns: repeat(3,1fr);
+        max-width:900px;
+        margin:auto;
     }
 }
 
 .card {
-    background: var(--card-bg);
+    background: white;
     padding: 15px;
-    border-radius: 25px;
+    border-radius: 20px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    position: relative;
 }
 
-.initial-circle {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    background: #333;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-    margin: auto;
+.menu {
+    position:absolute;
+    top:10px;
+    right:10px;
+    cursor:pointer;
 }
 
-.name {
-    font-size: 18px;
-    margin: 10px 0;
+.avatar {
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#333;
+    color:white;
+    font-size:35px;
+    overflow:hidden;
 }
+
+.avatar img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.name { margin:10px 0; }
 
 .call-btn {
-    background: #34C759;
-    color: white;
-    border: none;
-    padding: 12px;
-    width: 100%;
-    border-radius: 15px;
-    font-size: 16px;
+    background:#34C759;
+    color:white;
+    border:none;
+    padding:12px;
+    width:100%;
+    border-radius:15px;
 }
 </style>
 </head>
@@ -94,17 +96,23 @@ h1 {
 
 <div class="container" id="contacts"></div>
 
+<input type="file" id="file" accept="image/*" style="display:none">
+
 <script>
 let contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+let editIndex = null;
 
-function render() {
-    const box = document.getElementById('contacts');
-    box.innerHTML = '';
+function render(){
+    const box=document.getElementById('contacts');
+    box.innerHTML='';
 
-    contacts.forEach((c, i) => {
+    contacts.forEach((c,i)=>{
+        const avatar = c.photo ? `<img src="${c.photo}">` : c.name[0].toUpperCase();
+
         box.innerHTML += `
         <div class="card">
-            <div class="initial-circle">${c.name[0].toUpperCase()}</div>
+            <div class="menu" onclick="editContact(${i})">⋮</div>
+            <div class="avatar">${avatar}</div>
             <div class="name">${c.name}</div>
             <button class="call-btn" onclick="callNow('${c.number}')">📞 CALL</button>
         </div>`;
@@ -113,18 +121,50 @@ function render() {
     localStorage.setItem('contacts', JSON.stringify(contacts));
 }
 
-function addContact() {
-    let name = prompt("Enter Name");
-    let number = prompt("Enter Number");
+function addContact(){
+    editIndex=null;
+    openForm();
+}
 
-    if(name && number) {
-        contacts.push({name, number});
-        render();
+function editContact(i){
+    editIndex=i;
+    openForm(contacts[i]);
+}
+
+function openForm(data={}){
+    let name=prompt("Name",data.name||"");
+    if(!name) return;
+
+    let number=prompt("Number",data.number||"");
+    if(!number) return;
+
+    let addPhoto=confirm("Add photo?");
+
+    if(addPhoto){
+        document.getElementById('file').click();
+        document.getElementById('file').onchange=(e)=>{
+            const reader=new FileReader();
+            reader.onload=(ev)=>{
+                saveData(name,number,ev.target.result);
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        };
+    } else {
+        saveData(name,number,data.photo||null);
     }
 }
 
-function callNow(num) {
-    window.location.href = "tel:" + num;
+function saveData(name,number,photo){
+    const data={name,number,photo};
+
+    if(editIndex!==null) contacts[editIndex]=data;
+    else contacts.push(data);
+
+    render();
+}
+
+function callNow(num){
+    window.location.href="tel:"+num;
 }
 
 render();
