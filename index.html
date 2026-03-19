@@ -69,7 +69,12 @@
             color: white; cursor: pointer; font-weight: bold; 
         }
 
-        .container { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; }
+        .container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    justify-items: center;
+}
         .card { 
             background: var(--card-bg); padding: 30px; border-radius: 35px; width: 240px; 
             position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.1); 
