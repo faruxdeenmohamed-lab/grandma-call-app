@@ -26,6 +26,17 @@ h1 { font-size: 20px; }
     margin: 15px 0;
 }
 
+/* SEARCH BAR */
+.search {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    border-radius: 15px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
 .container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -62,9 +73,7 @@ h1 { font-size: 20px; }
     overflow:hidden;
 }
 
-.avatar img
-    
-    {
+.avatar img {
     width:100%;
     height:100%;
     object-fit:cover;
@@ -136,6 +145,9 @@ h1 { font-size: 20px; }
 <h1>GRANDMA CALL APP</h1>
 <button class="add-btn" onclick="addContact()">+ New Contact</button>
 
+<!-- SEARCH BAR -->
+<input type="text" id="search" class="search" placeholder="🔍 Search contact..." oninput="render()">
+
 <div class="container" id="contacts"></div>
 
 <!-- FORM MODAL -->
@@ -161,9 +173,16 @@ let photoData = null;
 
 function render(){
     const box=document.getElementById('contacts');
+    const search=document.getElementById('search').value.toLowerCase();
+
     box.innerHTML='';
 
-    contacts.forEach((c,i)=>{
+    contacts
+    .filter(c => 
+        c.name.toLowerCase().includes(search) || 
+        c.number.includes(search)
+    )
+    .forEach((c,i)=>{
         const avatar = c.photo ? `<img src="${c.photo}">` : c.name[0].toUpperCase();
 
         box.innerHTML += `
